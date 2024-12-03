@@ -1,14 +1,21 @@
 from class_Estoque import Estoque, Novo_estoque
+from utils import listar_produtos
 
 #iniciando classe
 estoque=Novo_estoque
 
 while True:
-    print('Bem Vindo ao Sistema de Estoque. Por favor, escolha uma das opções abaixo:'+ '\n')
-
-    escolha_usuario = input('[C] - Cadastar Novo Produto | [L] - Listar Estoque |'
-                            ' [I] - Exibir Info Produto | [A] - Alterar quantidade |'
-                            ' [E] - Excluir Produto | [S] - Sair: ').upper()
+    print("""
+    Bem-vindo ao Sistema de Estoque!
+    Escolha uma opção:
+    [C] - Cadastrar Novo Produto
+    [L] - Listar Estoque
+    [I] - Exibir Informações de um Produto
+    [A] - Alterar Quantidade
+    [E] - Excluir Produto
+    [S] - Sair
+    """)
+    escolha_usuario=input(':').upper()
 
     if escolha_usuario == 'C':
         #recebendo informações do produto
@@ -28,7 +35,7 @@ while True:
         estoque.cadastrar_produto()
 
     elif escolha_usuario == 'L':
-        estoque.listar_produtos()
+        listar_produtos()
 
     elif escolha_usuario == 'I':
         estoque.exbir_produto()
@@ -48,3 +55,4 @@ while True:
         continue
 
 print('Obrigado por utilizar nosso Sistema de Controle de Estoque' + '\n' + 'Até a próxima!')
+
