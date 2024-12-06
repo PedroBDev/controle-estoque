@@ -1,6 +1,13 @@
 import json
 CAMINHO_ARQUIVO='estoque.json'
 
+def parse_input(message):
+    while True:
+        response = input(message).strip().upper()
+        if response in ('S', 'N'):
+            return response == 'S'
+        else:
+            print("Por favor, responda apenas com 'S' ou 'N'.")
 def listar_produtos():
     # carregando lista de produtos:
     estoque = carregar_dados()

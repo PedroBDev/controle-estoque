@@ -1,29 +1,31 @@
 import json
-from utils import carregar_dados, salvar_dados, validacao_dados, busca_por_id
+from utils import carregar_dados, salvar_dados, validacao_dados, busca_por_id, parse_input
 
 CAMINHO_ARQUIVO='estoque.json'
 
 class Estoque:
-    try:
-        with open(CAMINHO_ARQUIVO, 'r+') as arquivo:
-            lista_id = json.load(arquivo)
-        id_counter=lista_id[-1]['id']
-    except FileNotFoundError:
-        id_counter = 0
 
     def __init__(self, nome_produto, quantidade):
         if not nome_produto or not isinstance(nome_produto, str):
             raise ValueError('Nome do Produto deve ser uma string não vazia!')
-        if quantidade<0 or not isinstance(quantidade, int):
-            raise ValueError('Quantidade deve ser um inteiro não negativo!')
+        if quantidade<0:
+            raise ValueError('A Quantidade não deve ser negativa!')
 
         self.nome_produto = nome_produto
         self.quantidade = quantidade
-        self.id = Estoque.id_counter
+        self.id = None
 
 
     def cadastrar_produto(self):
-        self.id=Estoque.id_counter + 1
+
+        try:
+            with open(CAMINHO_ARQUIVO, 'r+') as arquivo:
+                lista_id = json.load(arquivo)
+            id_counter = lista_id[-1]['id']
+        except FileNotFoundError:
+            id_counter = 0
+
+        self.id= id_counter + 1
         info_produtos = {'nome': self.nome_produto, 'quantidade' : self.quantidade, 'id' : self.id}
 
         #carregando dados
@@ -73,27 +75,43 @@ class Estoque:
         while True:
             codigo_produto, estoque = validacao_dados()
 
+            tipo_produto = parse_input('O Produto é estocado por KG(granel)[S - SIM | N - NÃO]?')
 
-
-            #verificando se o id passado corresponde
+                    #verificando se o id passado corresponde
             for info_estoque in estoque:
                 if codigo_produto == info_estoque['id']:
-
-                    #recebendo a quantidade e verificando se é uma entrada válida
-                    while True:
-                        try:
-                            nova_quantidade = input('Informe a nova quantidade:')
-                            nova_quantidade = int(nova_quantidade)
-                            info_estoque['quantidade']=nova_quantidade
-                            counter+=1
-                            salvar_dados(estoque)
-                            break
-
-
-                        except ValueError:
-                            print('Você não digitou um inteiro!' + '\n' 'Por favor, Digite um valor válido!')
+                    if not tipo_produto:
+                        #recebendo a quantidade e verificando se é uma entrada válida
+                        while True:
+                            try:
+                                nova_quantidade = input('Informe a nova quantidade:')
+                                nova_quantidade = int(nova_quantidade)
+                                info_estoque['quantidade']=nova_quantidade
+                                counter+=1
+                                salvar_dados(estoque)
+                                print('Quantidade alterada com sucesso!')
+                                break
 
 
+                            except ValueError:
+                                print('O produto só aceita valor inteiro' + '\n' +
+                                      'Por favor, Digite um valor válido!')
+
+                    else:
+                            # recebendo a quantidade e verificando se é uma entrada válida
+                            while True:
+                                try:
+                                    nova_quantidade = input('Informe a nova quantidade:')
+                                    nova_quantidade = float(nova_quantidade.replace(',', '.'))
+                                    info_estoque['quantidade'] = nova_quantidade
+                                    counter += 1
+                                    salvar_dados(estoque)
+                                    print('Quantidade alterada com sucesso!')
+                                    break
+
+
+                                except ValueError:
+                                    print('Por favor, Digite um valor válido!')
 
 
             if counter == 0:

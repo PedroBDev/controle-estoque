@@ -21,7 +21,7 @@
   },
   {
     "nome": "Leite em Po",
-    "quantidade": 8,
+    "quantidade": 3,
     "id": 5
   },
   {
@@ -43,5 +43,15 @@
     "nome": "maca",
     "quantidade": 6,
     "id": 9
+  },
+  {
+    "nome": "charque",
+    "quantidade": 3.0,
+    "id": 10
+  },
+  {
+    "nome": "queijo",
+    "quantidade": 10.0,
+    "id": 11
   }
 ]
